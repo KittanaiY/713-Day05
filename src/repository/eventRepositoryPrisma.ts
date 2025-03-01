@@ -1,6 +1,6 @@
 import { organizer } from './../../node_modules/.prisma/client/index.d';
 import { PrismaClient } from "@prisma/client";
-import type { Event } from "../models/event";
+import type { Event, PageEvent } from "../models/event";
 
 const prisma = new PrismaClient();
 
@@ -66,3 +66,41 @@ export function addEvent(newEvent: Event) {
     }
   });
 }
+
+export async function getAllEventsWithOrganizerPagination(
+  keyword: string,
+  pageSize: number,
+  pageNo: number
+ ) {
+  const where = {
+    OR: [
+      { title: { contains: keyword } },
+      { description: { contains: keyword } },
+      { category: { contains: keyword } },
+      { organizer: { name: { contains: keyword}}}
+    ]
+  }
+
+  const events = await prisma.event.findMany ({
+    where,
+    skip: pageSize * (pageNo-1),
+    take: pageSize,
+    select: {
+      id: true,
+      title: true,
+      category: true,
+      organizerId: false,
+      organizer: {
+        select: {
+          name: true
+        }
+      }
+    }
+  });
+  const count = await prisma.event.count({where})
+  return { count, events } as PageEvent;
+ }
+
+ export function countEvent() {
+  return prisma.event.count();
+ }
