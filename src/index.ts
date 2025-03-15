@@ -3,10 +3,19 @@ import express, { Request, Response } from "express";
 import multer from 'multer';
 import dotenv from 'dotenv';
 import eventRoute from './routes/eventRoute';
+import cors from 'cors';
 dotenv.config();
-
+console.log(process.env.DATABASE_URL);
 import { uploadFile } from './services/uploadFileService';
 const app = express();
+const allowedOrigins = ['http://localhost:5173','https://seven13-day05-k9hs.https://713-2024-frontend-example-git-main-kittis-projects-a50ca2d7.vercel.app'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+
+// Then pass these options to cors:
+app.use(cors(options));
 app.use(express.json());
 app.use('/events',eventRoute);
 const port = process.env.PORT || 3000;
