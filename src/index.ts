@@ -8,7 +8,7 @@ dotenv.config();
 console.log(process.env.DATABASE_URL);
 import { uploadFile } from './services/uploadFileService';
 const app = express();
-const allowedOrigins = ['http://localhost:5173','https://seven13-day05-k9hs.https://713-2024-frontend-example-git-main-kittis-projects-a50ca2d7.vercel.app'];
+const allowedOrigins = ['http://localhost:5173','https://713-2024-frontend-example-git-main-kittis-projects-a50ca2d7.vercel.app'];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins
